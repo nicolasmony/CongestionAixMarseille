@@ -1,5 +1,7 @@
-# CongestionAixMarseille
+# Programmes de travail
 
-Bienvenu sur le répertoire d'échange à propos des méthodes de modélisation de la congestion sur le réseau structurant de l'agglomération d'Aix-Marseille.
+Cette section regroupe les différents programmes de travil envisagés pour les itérations successives de définition de la méthodlogie.
 
-Ce répertoire a pour objectif de réunir, diffuser et permettre le travail collaboratif sur les notes méthodologiques, les bases de données et les algorithmes de calcul dans le cadre de ce projet.
+## Itération 1
+
+L'itération 1 consistera en un premier lieu à un tour d'horizon bibliographique du sujet du Dynamic Network Loading afin de proposer les meilleurs algorithmes et logiciels pouvatn répondre aux besoins de l'étude de la congestion sur le réseau structurant de l'agglomération d'Aix-Marseille.
