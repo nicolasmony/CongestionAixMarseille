@@ -1,7 +1,10 @@
-# Programmes de travail
+# Assistance à maîtrise d’ouvrage pour l’organisation et la définition des moyens de modéliser la congestion du réseau structurant de l’agglomération de Marseille
 
-Cette section regroupe les différents programmes de travil envisagés pour les itérations successives de définition de la méthodlogie.
+Bienvenue sur l'espace d'échange dédié à la mission d'assistance à maîtrise d’ouvrage pour l’organisation et la définition des moyens de modéliser la congestion du réseau structurant de l’agglomération de Marseille.
 
-## Itération 1
+La mission a pour objectif d'aider la DIRMED à définir les méthodes et les données nécessaires pour produire un modèle original capable de représenter la dynamique de la congestion routière qui a lieu sur le réseau qu'elle gère.
 
-L'itération 1 consistera en un premier lieu à un tour d'horizon bibliographique du sujet du Dynamic Network Loading afin de proposer les meilleurs algorithmes et logiciels pouvant répondre aux besoins de l'étude de la congestion sur le réseau structurant de l'agglomération d'Aix-Marseille.
+## Table des matières
+
+- Programmes de travail
+- Revue de littérature
