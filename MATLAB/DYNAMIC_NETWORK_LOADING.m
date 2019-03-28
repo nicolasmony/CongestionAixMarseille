@@ -38,7 +38,7 @@ fprintf('Departure rate data loaded from: %s\n', departureRatesFile)
 
 
 % PROVIDE FILEPATH FOR PROCESSED NETWORK DATA (_pp.mat)
-processedDataFile = [myfolder, 'MarseilleAubagne2_pp.mat'];
+processedDataFile = [myfolder, 'MarseilleAubagne_pp.mat'];
 load(processedDataFile)
 fprintf('Processed data loaded from:      %s\n', processedDataFile)
 

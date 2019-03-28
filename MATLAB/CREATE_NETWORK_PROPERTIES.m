@@ -190,8 +190,8 @@ fileName = networkName;
 fileName(fileName == ' ') = '';  % remove space chars
 
 
-% save pre processed data with name format 'network_numOfPaths_pp.mat'
-dir = [myfolder, fileName, num2str(path.count), '_pp.mat'];
+% save pre processed data with name format 'network_pp.mat'
+dir = [myfolder, fileName,'_pp.mat'];
 save(dir)
 fprintf(['Variables saved to:       ', dir, '\n\n'])
 
