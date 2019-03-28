@@ -2,7 +2,7 @@
 
 import sys
 import glob
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import itertools
 import operator
 from math import atan,sqrt
