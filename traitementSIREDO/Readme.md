@@ -5,7 +5,7 @@
 L'objet de la section est de présenter une manière d'exploiter directement les relevés 6 min des boucles SOL2 installés dans la chaussée pour obtenir les caractéristiques principales ainsi que l'enveloppe concave du nuage de points du diagramme fondamental.
 La méthodologie s'inspire du rapport Théorie du trafic et régulation dynamique du CEREMA qui recommande d'obtenir une caractérisation du diagramme fondamental par l'obtention de l'enveloppe des données plutôt que par une régression linéaire.
 L'algorithme de recherche d'enveloppe convexe utilisé est celui du parcours de Graham.
-La capacité est déterminé comme le débit maximum obtenu avec l'enveloppe. La vitesse à vide est la vitesse la pente maximale de l'enveloppe (obtenue sur une portion significatiive).
+La capacité est déterminé comme le débit maximum obtenu avec l'enveloppe. La vitesse à vide est la vitesse la pente maximale de l'enveloppe (obtenue sur une portion significative).
 
 # Utilisation du script
 
