@@ -5,7 +5,7 @@
 clear
 
 % FOLDER NAMES
-  myfolder= 'C:\\Users\\Alexandre\\Documents\\C0709 DIRMED\\3_LOGICIELS\\DTA_KeHan\\DNL Marseille\\'
+  myfolder= 'D:\\Projets_EXPLAIN\\AMO Meso Aix-Marseille\\DNL Marseille\\';
 cd(myfolder)
 %% DATA INPUT
 
@@ -18,7 +18,7 @@ pathData = [myfolder, 'Marseille_paths.mat'];
 
 
 % load variables from specified MAT-files
-load(networkData, 'networkName', 'linkData', '*')
+load(networkData, 'networkName', 'linkData', '*s')
 load(pathData, 'pathList')
 fprintf('Network data loaded from: %s\n', networkData)
 fprintf('Network name: %s\n', networkName)
@@ -190,8 +190,8 @@ fileName = networkName;
 fileName(fileName == ' ') = '';  % remove space chars
 
 
-% save pre processed data with name format 'network_numOfPaths_pp.mat'
-dir = [myfolder, fileName, num2str(path.count), '_pp.mat'];
+% save pre processed data with name format 'network_pp.mat'
+dir = [myfolder, fileName,'_pp.mat'];
 save(dir)
 fprintf(['Variables saved to:       ', dir, '\n\n'])
 

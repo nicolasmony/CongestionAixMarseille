@@ -1,52 +1,30 @@
-% This script performs the Dynamic Network Loading procedure based on the
-% DAE system formulation of the LWR-based network model.
-%
+function delay=DYNAMIC_NETWORK_LOADING(pathDepartures, nt, dt, processedDataFile)
+% nt is the number of time steps (must be >= number of time steps in the
+% departure rate data
+% dt is the time step in second
+
 % Notes and assumptions:
-% - Free flow time and kinematic wave TIME are multiples
+% - Link free flow time and kinematic wave travel time are multiples
 % of dt (if not in data, then modified before simulating)
 % - Sources and sinks represented at OD nodes by means of virtual link
-% - All units in SI i.e. meters, seconds and vehicles
+% - All units in SI i.e. metres, seconds and vehicles
 %
 % DOCUMENTATION AND CITE AS: 
 %        Han,K., Eve,G., Friesz,T.L. (2019) Computing Dynamic User Equilibria on
 %        Large-Scale Networks with Software Implementation. Networks and Spatial
 %        Economics, https://doi.org/10.1007/s11067-018-9433-y
-%        
-%        
-% 
+%
 % *****************************************
 % Developed by Gabriel Eve and Ke Han, 2018
 % *****************************************
 
-clear
-
 
 %% DATA INPUT
-
-nt = 100;      % must be >= to number of time steps in departure rate data
-
-
-% FOLDER NAMES
-myfolder= 'C:\\Users\\Alexandre\\Documents\\C0709 DIRMED\\3_LOGICIELS\\DTA_KeHan\\DNL Marseille\\'
-cd(myfolder)
-
-% PROVIDE FILEPATH FOR DEPARTURE RATES (_dep.mat)
-
-departureRatesFile = [myfolder, 'Marseille_depRates.mat'];
-load(departureRatesFile, 'pathDepartures', 'dt')
-fprintf('Departure rate data loaded from: %s\n', departureRatesFile)
-
-
-% PROVIDE FILEPATH FOR PROCESSED NETWORK DATA (_pp.mat)
-processedDataFile = [myfolder, 'MarseilleAubagne2_pp.mat'];
 load(processedDataFile)
 fprintf('Processed data loaded from:      %s\n', processedDataFile)
 
 
-
-
 %% INITIALIZING VARIABLES
-link
 
 % issue warning if any free flow times < time step
 if any(link.FFT < dt)
@@ -109,7 +87,7 @@ supply = [S_link; inf(source.count+sink.count,1)];  % supply: how much can enter
 
 eps = 1e-9;                                         % machine precision tolerance
 
-tic % timer
+%tic % timer
 for tn = 1:nt  % loop over all time steps
     
     %% Link model
@@ -212,8 +190,8 @@ for tn = 1:nt  % loop over all time steps
 end
 
 dispstat(sprintf('\t%6.0f%% Complete', tn/nt*100))
-timeElapsed = toc;
-fprintf('\b\tTime elapsed: %6.2fs\n', timeElapsed)
+%timeElapsed = toc;
+%fprintf('\b\tTime elapsed: %6.2fs\n', timeElapsed)
 
 % remove values at Nt+1 for data uniformity
 Nup(:,nt+1) = [];
@@ -231,11 +209,7 @@ fprintf('Computing path travel times\n')
 timeFunction = zeros(size(Ndn));
 FFT_mod = [link.FFT_mod; zeros(source.count,1)];
 % loop through all links, a (virtual links included)
-
-fileID = fopen( [myfolder,'sortie.txt'],'w');
-
 for a = 1:size(Ndn,1)
-    fprintf(fileID, 'Link %i\n', a)
     % convert free flow times to equivalent number of time-steps
     fft = round(FFT_mod(a)/dt);
     % loop through each time-step, m
@@ -247,9 +221,6 @@ for a = 1:size(Ndn,1)
         else
             timeFunction(a,t_in) = t_in + ltt-1;  % travel time = travel time
         end
-    end
-    for t_in = 1:60:nt
-      fprintf(fileID, 'at t=%.2f, travelTime=%.2f (+%.2f)\n', t_in, timeFunction(a,t_in), timeFunction(a,t_in)-fft)
     end
 end
 
@@ -306,12 +277,9 @@ sink.Qin = Qin(sink.index,:);
 link.density = (link.Nup - link.Ndn) ./ link.length_mod(:, ones(1,nt));
 
 
-%% Save to file
+%% Output parameter
+delay=path.travelTime;
 
-% save output data with name format 'network_out.mat'
-dir = [myfolder, fileName, '_out.mat'];
-save(dir, 'networkName', 'link', 'node', 'source', 'sink', 'path', 'pathList', 'nt', 't')
-fprintf(['Outputs saved to:          ', dir, '\n'])
 
 %% Debugging
 
