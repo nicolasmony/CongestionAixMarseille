@@ -1,4 +1,4 @@
-﻿Lien_no,Nom_long,Nom_court,NUM_ROUTE,SENS,Nstart,Nend,VITESSE,FFT,VOIES,Capacity,longueur,Postes_comptage,SIREDO,tps_moyen,tps_std
+﻿Lien_no,Nom_long,Nom_court,NUM_ROUTE,SENS,Nstart,Nend,VITESSE (km/h),FFT,VOIES,Capacity (veh/s),longueur (m),Postes_comptage,SIREDO,tps_moyen (s),tps_std (s)
 1,A501d_1_0,A501b1,A501,O,18,175,90,10.77,2.00,1.10,269.2,,,,
 2,A501d_2.5_1,A501a,A501,O,19,18,90,64.48,2.00,1.10,1612.1,,M4l&M4m&M4n&M4o,75.05,70.40
 102,A50_S1,A50_S1,D8N,E,2,25,50,14.40,,0.80,200,46,,,
