@@ -17,4 +17,6 @@ Pour cet exemple, le réseau et les taux de départ ont été pré-chargés dans
 Une illustration du chargement de l'axe A50-A501 entre 06h00 et 10h00 en jour ouvrable (lundi, mardi, jeudi) s'affiche alors à l'écran. 
 
 (¤) Une version d'essai gratuite de MATLAB peut être obtenue en suivant le lien https://fr.mathworks.com/campaigns/products/trials.html
+La méthodologie d'élaboration du réseau simplifié est exposée dans le fichier METHODOLOGIE.md
+
 (¤¤) Le code original a été modifié par Explain (23/04/2019) pour rectifier ce que nous supposons être une erreur dans le modèle de transfert aux jonctions entre arcs, qui générait une congestion artificiellement élevée dans la version initiale.
