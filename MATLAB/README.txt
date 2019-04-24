@@ -18,7 +18,7 @@ https://www.gnu.org/software/octave/
 2. Ouvrir le dossier dans lequel ont été téléchargés les fichiers *.m et *.mat
 
 3. Exécuter, dans l'ordre,
-save_Marseille_dat.m
+save_Marseille_net.m
 save_Marseille_paths.m
 save_Marseille_dep.m
 CREATE_NETWORK_PROPERTIES.m
