@@ -1,8 +1,8 @@
-CAS D'ETUDE: *** Chargement de l'axe A50-A501 dans le sens Aubagne vers Marseille en JOB entre 06h00 et 10h00 ***
+ *** Chargement de l'axe A50-A501 dans le sens Aubagne vers Marseille en JOB entre 06h00 et 10h00 ***
 
 UTILISATION
 ------------
-Pour cet exemple, le réseau et les taux de départ ont été pré-chargés dans des fichiers de données MATLAB (les xxx.mat de ce dossier). L'exécution du code en est donc facilitée :
+Pour cet exemple, le réseau et les taux de départ ont été pré-chargés dans des fichiers de données MATLAB (¤) (les xxx.mat de ce dossier). L'exécution du code en est donc facilitée :
 
 1. Télécharger l'ensemble des fichiers dans un même dossier
 
@@ -15,3 +15,5 @@ Pour cet exemple, le réseau et les taux de départ ont été pré-chargés dans
 5. Exécuter *OPEN_NETWORK_GUI.m*
 
 Une illustration du chargement de l'axe A50-A501 entre 06h00 et 10h00 en jour ouvrable (lundi, mardi, jeudi) s'affiche alors à l'écran. 
+
+(¤) Une version d'essai gratuite de MATLAB peut être obtenue en suivant le lien https://fr.mathworks.com/campaigns/products/trials.html
