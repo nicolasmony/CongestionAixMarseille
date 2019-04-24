@@ -6,3 +6,5 @@ Le répertoire contient l'ensemble des données utilisées pour mettre au point 
 - table des arcs du réseau représenté par l'A50 et l'A501.
 - table des noeuds du réseau représenté par l'A50 e l'A501.
 Les données sur le réseau constituent une extraction sous forme CSV de la base présentée dans la partie CodificationReseau.
+
+Ces données sont analysées succinctement dans la note technique NT02 ("20190312_C0709_NT02_Analyse_du_Trafic_V.1.0.pdf"), qui propose également une codification du réseau.
