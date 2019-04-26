@@ -185,8 +185,8 @@ function out = networkGUI(networkName, link, node, source, sink, path, pathList,
 %% Create main GUI figure
 
 networkScale = sqrt(node.count);
-linkSize = 38 / networkScale;  % link width
-nodeSize = 125 / networkScale;  % node diameter
+linkSize = 20 / networkScale;  % link width
+nodeSize = 50 / networkScale;  % node diameter
 
 scrsz = get(0,'ScreenSize');
 hfig = figure('Name', 'Network Simulation', ...
@@ -201,7 +201,7 @@ hold on
 
 % create virtual nodal coordinates for 2-way flow (left hand drive - for
 % right hand drive, reverse the sign for dx and dy.
-laneSpacing = (max(node.X) - min(node.X)) / networkScale * 0.05;
+laneSpacing = (max(node.X) - min(node.X)) / networkScale * 0.01; % initially: * 0.05
 phi = atan2(node.Y(link.headNode) - node.Y(link.tailNode), node.X(link.headNode) - node.X(link.tailNode));
 dx = sin(phi) * laneSpacing;
 dy = -cos(phi) * laneSpacing;
