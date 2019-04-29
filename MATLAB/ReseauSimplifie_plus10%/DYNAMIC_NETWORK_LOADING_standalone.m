@@ -27,7 +27,7 @@ nt = 2881;      % must be >= to number of time steps in departure rate data
 
 
 % FOLDER NAMES
-myfolder= 'C:\\Users\\AlexandreNicolas\\Documents\\C0709 DIRMED\\3_LOGICIELS\\DTA_KeHan\\DNL Marseille\\Modele_simplifie_NxM\\DNL Marseille\\';
+myfolder= 'C:\\Users\\AlexandreNicolas\\Documents\\C0709 DIRMED\\3_LOGICIELS\\DTA_KeHan\\DNL Marseille\\Modele_simplifie_NxM\\ReseauSimplifie_plus10%\\';
 cd(myfolder)
 
 % PROVIDE FILEPATH FOR DEPARTURE RATES (_dep.mat)
@@ -311,6 +311,7 @@ link.density = (link.Nup - link.Ndn) ./ link.length_mod(:, ones(1,nt));
 %% Save to file
 
 % save output data with name format 'network_out.mat'
+fileName='AubagneMarseille'
 dir = [myfolder, fileName, '_out.mat'];
 save(dir, 'networkName', 'link', 'node', 'source', 'sink', 'path', 'pathList', 'nt', 't')
 fprintf(['Outputs saved to:          ', dir, '\n'])

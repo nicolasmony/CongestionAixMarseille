@@ -1,5 +1,6 @@
 function out = networkGUI(networkName, link, node, source, sink, path, pathList, nt, t)
-
+% set departure time
+myDepartureTime= datetime(2018,01,23,06,30,0);
 % fileName is used when saving a GIF of animation
 
 %% Callback definitions
@@ -108,7 +109,7 @@ function out = networkGUI(networkName, link, node, source, sink, path, pathList,
 %                                     imwrite(A,map,[fileName, '.gif'],'gif','WriteMode','append','DelayTime',0.2);
 %                                 end
                                 %%% end save to GIF %%%
-                pause(0.1)
+                pause(0.012)
             end
             set(h, 'String', 'Start')
             simulationInProcess = false;
@@ -177,7 +178,7 @@ function out = networkGUI(networkName, link, node, source, sink, path, pathList,
         %         set(hnodes(sel), 'MarkerEdge', 'none')
         %         set(hnodes(~sel), 'MarkerEdge', 'k', 'MarkerFace', 'none')
         %         set(hnodes(~sel), 'MarkerFace', 'none')
-        textsliderstr = sprintf('%0.1f min', t(tn) / 60);
+        textsliderstr = sprintf( datestr( myDepartureTime + seconds(t(tn)), 'HH:MM') );
         set(htextslider, 'String', textsliderstr)
         
     end
