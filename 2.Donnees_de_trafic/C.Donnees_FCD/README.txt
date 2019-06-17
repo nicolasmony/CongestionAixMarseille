@@ -4,7 +4,7 @@ Ce répertoire contient les données de voiture flottantes utilisées pour l'ét
 
 Chaque fichier CSV contient 
 - les moyennes harmoniques des temps de parcours,
-- l'écart-typoe des des temps de parcours, et 
+- l'écart-type ("std") des des temps de parcours, et 
 - les moyennes arithmétiques des vitesses (par intervalle de 6 minutes) 
 pour le tronçon indiqué en nom de fichier, pour les lundis, mardis et jeudis (ces jours sont confondus).
 
