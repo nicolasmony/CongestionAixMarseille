@@ -1,10 +1,22 @@
 LISEZ-MOI
 ------------------------------------
-Ce dossier contient d'une part :
-- un tableau Excel "reseau_FCD.xlsx" avec la description du réseau autoroutier et routier structurant du périmètre d'étude
-- les scripts Python permettant de convertir les données sur le réseau en des variables (matrices) lues par les différents programmes/logiciels, notamment MATLAB
-- le fichier texte résultant de l'exécution de ces scripts.
+Ce répertoire contient les données qui nourriront directement le programme de simulation dynamique MATLAB, à savoir :
 
-D'autre part, il inclut aussi les algorithmes permettant la reconstitution d'une matrice dynamique de demande à partir du réseau codifié et des mesures empiriques de débit et de temps de parcours FCD :
-- un fichier Excel "CalculMatriceDynamique_Fratar_petit.xlsx" mettant en œuvre une méthode de Fratar à partir des débits mesurés ou déduits (par une analyse simple, indépendante) aux différents points d'injection/sortie du réseau. Les onglets du fichier Excel concernent le recensement des différents trajets OD, les tronçons FCD empruntés par chacun de ces trajets, les temps de parcourus associés aux tronçons (données FCD) et l'implémentation de la méthode de Fratar.
-- un script Python "calage_dynamique.py" qui met en œuvre une méthode de suivi des chemins et de répartition des débits. Les noms de fichiers et valeurs de paramètres (y compris l'ensemble des nœuds d'entrée/sortie du réseau) à modifier pour l'exécution du script figurent en tête de script, dans les espaces annotés. Le script lit le réseau codifié (tableur Excel), calcule l'ensemble des itinéraires possibles, évalue au fil du temps le flux minimal le long de chaque itinéraire (en répartissant le débit mesuré entre les différents itinéraires si l'arc où a lieu la mesure est partagé entre plusieurs itinéraires) et produit un fichier texte avec des matrices directement importables dans MATLAB (par copier-coller).
+A) Le réseau modélisé
+
+Les caractéristiques du réseau sont répertoriées dans le tableau Excel "reseau_FCD.xlsx" (longueur des arcs, temps de parcours à vide, capacité, ...), décrivant le réseau autoroutier et le routier structurant du périmètre d'étude (A50/A501). La méthode de constitution de ce réseau modèle est exposée dans la section 4 de la note NT02 (dans le répertoire CongestionAixMarseille/2.Donnees_de_trafic)
+
+Est également présent le script Python "writeNetwork.py" qui permet la transformation de ce tableur Excel en listes d'arcs et de nœuds lisibles par MATLAB.
+
+
+B) La méthode de Fratar dynamique pour reconstituer une matrice dynamique
+
+Cette méthode part des débits injectés dans le réseau aux différentes entrées et extraites du réseau aux différentes sorties; elle optimise ensuite les flux associés à un ensemble de chemins prédéfinis.
+
+
+C) La méthode de répartition dynamique des débits
+
+Cette méthode suit les débits rencontrés par les véhicules partis d'une certaine origine à une certaine heure le long des arcs de l'itinéraire, relève les débits rencontrés et les répartit entre itinéraires empruntant des arcs communs.
+
+
+Les deux méthodes précédentes, B) et C), permettant la reconstitution d'une matrice dynamique de demande (taux de départ) par itinéraire, sont détaillées dans la note NT08_Reconstitution_des_matrices_de_demande.pdf 
