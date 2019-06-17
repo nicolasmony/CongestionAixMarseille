@@ -8,6 +8,8 @@ Ainsi, à l'heure actuelle, seuls le tronçon de l'A50 de Marseille vers Aubagne
 
 Chaque sous-dossier du présent répertoire contient une situation testée (situation actuelle, demande accrue, etc.), déjà implémentée dans les fichiers "save_***.m" -- les matrices de demande ont déjà été reconstituées dans chaque cas et intégrées au code, pour faciliter la tâche de l'utilisateur.
 
+Le tableur Excel "liste_des_variables.xlsx" répertorie les principaux paramètres et variables utilisés dans le code MATLAB, afin de faciliter sa compréhension.
+
 NB: L'outil de visulation des simulations n'est opérationnel que sous MATLAB (version d'essai gratuite).
 
 
