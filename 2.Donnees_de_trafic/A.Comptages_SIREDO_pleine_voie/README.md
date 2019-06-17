@@ -1,1 +1,5 @@
 LISEZ-MOI
+---------------------------
+Les données SIREDO, moyennées sur des jours supposés équivalents (JOB : lundi, mardi, jeudi), sont stockées sous la forme de fichiers CSV portant le nom du poste considéré, avec
+-	Sur chaque ligne, une plage horaire (heure de début d'un intervalle de 6 minutes)
+- Des variables de trafic sur les colonnes, telles qu'indiquées dans l'en-tête de la colonne.
