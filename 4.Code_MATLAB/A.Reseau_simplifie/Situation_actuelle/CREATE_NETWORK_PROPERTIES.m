@@ -38,15 +38,15 @@ if node.count ~= max(adjacencyList(:))
     fprintf('Number(nodes)= %i vs Max(node)=%i',node.count, max(adjacencyList(:)))
     warning('Nodes either do not start at ''1'' or are not sequential')
 end
-% obtain matrix from adjacency list
+% obtain matrix from adjacency list. This matrix tells us which nodes are connected to which.
 adjacencyMatrix = sparse(link.tailNode, link.headNode, true, node.count, node.count);
 
 
-%% Link properties
+%% Link properties: link has vectorial attributes whose length is typically the number of links
 
-link.capacity = linkData(:,3);                  % [veh/s] link capacity
-link.length = linkData(:,4);                  % [m] original length of link
-link.FFT = linkData(:,5);                % [s] original free flow time
+link.capacity = linkData(:,3);   % [veh/s] link capacity
+link.length = linkData(:,4);   % [m] original length of link
+link.FFT = linkData(:,5);   % [s] original free flow time
 
 
 %% Nodal coordinates (* if available)
@@ -66,8 +66,8 @@ c_ = find([diff(c); 1]);  % find index at end of each path % £££
 path.linkCount = [c_(1); diff(c_)];  % find number of links in each path % £££
 
 
-path.sourceNode = link.tailNode(pathList(:,1)); % £££
-path.sinkNode = link.headNode(pathList(sub2ind(size(pathList),1:size(pathList,1),path.linkCount'))); % £££
+path.sourceNode = link.tailNode(pathList(:,1)); % first node of the path
+path.sinkNode = link.headNode(pathList(sub2ind(size(pathList),1:size(pathList,1),path.linkCount'))); % last node of the path
 
 
 [source.nodes, ~, pathSources] = unique(path.sourceNode); % £££
@@ -77,8 +77,8 @@ path.sinkNode = link.headNode(pathList(sub2ind(size(pathList),1:size(pathList,1)
 
 
 
-source.count = numel(source.nodes);
-sink.count = numel(sink.nodes);
+source.count = numel(source.nodes); % number of first nodes (sources)
+sink.count = numel(sink.nodes); % number of final nodes (sinks)
 path.count = size(pathList,1);
 
 link.index = 1:link.count;
@@ -87,8 +87,8 @@ sink.index = source.index(end) + (1:sink.count);
 path.sourceIndex = source.index(pathSources);
 path.sinkIndex = sink.index(pathSinks);
 
-node.signalPriorities = cell(node.count,1);
-% alphas = node.signalPriorities;                 % $$$  % pre set turning ratios
+node.signalPriorities = cell(node.count,1); % pre-set turning ratios when links converge at a node (this is a vector of length the number of nodes)
+% alphas = node.signalPriorities;        % pre set turning ratios
 linksIn = cell(node.count,1);             % list of links into each node (including sources)
 linksOut = cell(node.count,1);            % list of links out of each node (including sinks)
 numLinksIn = zeros(node.count,1);         % number of flows into node
@@ -118,11 +118,12 @@ for i = 1:node.count
     
     if sum(source.nodes == i) == 1            % if node i is a source
         Cin = link.capacity(Lin(1:nLin-1)); %!!
+		% by default, the turning ratio is set to be proportional to the capacities of the incoming links (bar sources) 
         node.signalPriorities{i} = [Cin / (sum(Cin)+0.00001) * (1-sourceSignalPriority); sourceSignalPriority];
         
     else
         Cin = link.capacity(Lin);
-        node.signalPriorities{i} = Cin / (sum(Cin)+0.00001);
+        node.signalPriorities{i} = Cin / (sum(Cin)+0.00001); % by default, the turning ratio is set to be proportional to the capacities of the incoming links
     end
 end
 
@@ -153,7 +154,7 @@ for i = 1:node.count
 end
 pathLinksOut = pathLinksIn;
 
-for r = 1:path.count
+for r = 1:path.count % loop over paths
     pl = path.linkCount(r);
     pth = pathList(r,1:pl);
     kin = sourceInIdx(r);
@@ -161,12 +162,12 @@ for r = 1:path.count
     pathLinksIn{path.sourceNode(r)}{kin,kout}(end+1) = pathSourceLinkIdx(r);
     ipl = ipl + 1;
     pathLinksOut{path.sourceNode(r)}{kin,kout}(end+1) = ipl;
-    for i = 1:pl-1
+    for i = 1:pl-1 % loop over the links constituting the path
         Lin = pth(i);
         Lout = pth(i+1);
         kin = linkInIdx(Lin);
         kout = linkOutIdx(Lout);
-        pathLinksIn{link.headNode(Lin)}{kin,kout}(end+1) = ipl;
+        pathLinksIn{link.headNode(Lin)}{kin,kout}(end+1) = ipl; %incoming links
         ipl = ipl + 1;
         pathLinksOut{link.headNode(Lin)}{kin,kout}(end+1) = ipl;
     end

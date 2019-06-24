@@ -12,10 +12,13 @@
 %        Large-Scale Networks with Software Implementation. Networks and Spatial
 %        Economics, https://doi.org/10.1007/s11067-018-9433-y
 %        
-%        
+%        GitHub https://github.com/nicolasmony/CongestionAixMarseille/tree/master/4.Code_MATLAB
 % 
 % *****************************************
 % Developed by Gabriel Eve and Ke Han, 2018
+% *****************************************
+% *****************************************
+% Adapted and annotated by Explain, 2019
 % *****************************************
 
 clear
@@ -63,20 +66,24 @@ elseif nt > nt_departures
     pathDepartures(1,nt) = 0;      % pad pathDepartures with zeros to be consistent with nt
 end
 
+
+%% Link properties: link has vectorial attributes whose length is typically the number of links
 % round free flow times to multiples of dt and update link lengths accordingly
 link.FFT_mod = round(link.FFT / dt) * dt;       % [s] modified free flow time
 link.FFT_mod(link.FFT_mod == 0) = dt;           % if free flow time rounded to 0, impose minimum of dt
 link.length_mod = link.FFT_mod .* link.length ./ link.FFT;  % [m] modified length of link
 N_jam = 5.5 * link.capacity .* link.FFT_mod;      % (used later in loop)
-link.jamDensity = N_jam ./ link.length_mod;     % [veh/m] jam density
-tnk = round(link.FFT_mod / dt);                 % num of time-steps for free flow to reach head node
-tnw = round(4.5 * link.FFT_mod / dt);             % num of time-steps for shockwave to propagate to tail node
+%% Justification of prefactor 5.5: the ratio (in absolute value) of the slopes of the empirical fundamental diagram was measured
+%% to be around 1/4.5 on the A50/A501 axis. This implies that the density at which the flow vanishes is (1+4.5) times the peak density.  
+link.jamDensity = N_jam ./ link.length_mod;     % [veh/m] jam density (at which the flow vanishes)
+tnk = round(link.FFT_mod / dt);                 % number of time-steps for free flow to reach head node
+tnw = round(4.5 * link.FFT_mod / dt);             % num berof time-steps for shockwave to propagate to tail node
 t = 0:dt:(nt-1)*dt;                             % [s] time vector
 
-Nup = zeros(link.count + source.count + sink.count, nt);    % [veh] cumulative sum of upstream vehicles
-Ndn = zeros(link.count + source.count, nt);                 % [veh] cumulative sum of downstream vehicles
-Qin = Nup;                                                  % [veh/s] upstream flow
-Qout = Ndn;                                                 % [veh/s] downstream flow
+Nup = zeros(link.count + source.count + sink.count, nt);    % [veh] cumulative sum of upstream vehicles on each link
+Ndn = zeros(link.count + source.count, nt);                 % [veh] cumulative sum of downstream vehicles on each link
+Qin = Nup;                                                  % [veh/s] upstream flow on each link
+Qout = Ndn;                                                 % [veh/s] downstream flow on each link
 Qin_pathLinks = zeros(numTotalPathLinks, nt);               % [veh/s] upstream flow of paths % £££
 N_source = zeros(source.count, 1);                          % [veh] number of veh queueing at source at tn
 
@@ -101,6 +108,8 @@ fprintf('Simulating traffic flows')
 dispstat('', 'init')
 dispstat(sprintf('\t0%% Complete'))
 
+%% NB: in the following, demand refers to the flow that can be "emitted" (or"sent") by a link
+%% and supply refers to the flow that can be received by a link.
 D_link = zeros(link.count,1);                       % demand = 0 in empty network (initial condition)
 D_source = zeros(source.count,1);                   % demand at source (initial)
 S_link = link.capacity;                             % supply = capacity (initial condition)
@@ -109,7 +118,7 @@ capacity = [link.capacity; inf(source.count,1)];    % flow capacity (including v
 demand = [D_link; D_source];                        % demand (including virtual links)
 supply = [S_link; inf(source.count+sink.count,1)];  % supply: how much can enter (including virtual links)
 
-eps = 1e-9;                                         % machine precision tolerance
+eps = 1e-9;     % machine precision tolerance to set convergence criterion
 
 tic % timer
 for tn = 1:nt  % loop over all time steps
@@ -117,29 +126,31 @@ for tn = 1:nt  % loop over all time steps
     %% Link model
      
     % Link demand
-    tkappa = tn - tnk;                  % t - link.length/k index
+    tkappa = tn - tnk;                  % (t - link.length/k) index: time at which a free flowing vehicle that exits links now entered link
     ak = find(tkappa >= 1);
     aktk = sub2ind(size(Nup), ak, tkappa(ak));
     
-    demandCondition = (Nup(aktk) - Ndn(ak,tn) > eps);  % PDE solution
-    
+    demandCondition = (Nup(aktk) - Ndn(ak,tn) > eps);  % This condition targets links in which not all vehicles that entered at tkappa have exited yet, i.e., congested ones
+	
     D_link(:) = 0;
-    D_link(ak(demandCondition)) = link.capacity(ak(demandCondition));
-    D_link(ak(~demandCondition)) = Qin(aktk(~demandCondition));
+    D_link(ak(demandCondition)) = link.capacity(ak(demandCondition)); % congested links "send" a flow equal to their capacity
+    D_link(ak(~demandCondition)) = Qin(aktk(~demandCondition)); % for the other links, the demand is set to the upstream flow some time earlier
     
     % Link supply
-    tomega = tn - tnw;                  % t - link.length/w index
+    tomega = tn - tnw;                  % (t - link.length/w) index: time at which a free space that now reaches the entrance of a congested link was created downstream
     aw = find(tomega >= 1);
     awtw = sub2ind(size(Ndn), aw, tomega(aw));
     
-    supplyCondition = (Nup(aw,tn) - Ndn(awtw) - N_jam(aw) < -eps);  % PDE solution
+    supplyCondition = (Nup(aw,tn) - Ndn(awtw) - N_jam(aw) < -eps);  
+	%% Nup(aw,tn) - Ndn(awtw) is the number of cars either stored on the links or having exited too recently
+	%% to free room upstream. Therefore, this condition targets non-fully-saturated links
     
     S_link(:) = link.capacity;
-    S_link(aw(~supplyCondition)) = Qout(awtw(~supplyCondition));
+    S_link(aw(~supplyCondition)) = Qout(awtw(~supplyCondition)); % for fully saturated links, the flow that can be received is equal to the outflow some time earlier
     
 
     % Virtual link (source) demand
-    isQueue = N_source > eps;               
+    isQueue = N_source > eps;                   % vector of booleans that indicate if there is congestion at the origin of the path (source)             
     D_source(isQueue) = inf;                    % if queue present, demand = infinite
     Q_source = Qin(source.index,tn);            % departure rate
     D_source(~isQueue) = Q_source(~isQueue);    % if no queue, demand = departure rate
@@ -160,7 +171,7 @@ for tn = 1:nt  % loop over all time steps
         
         gamma = cell(nLin,nLout);
         alpha = zeros(nLin,nLout);
-        for ik = 1:nLin
+        for ik = 1:nLin % loop over incoming links
             Lik = Lin(ik);
             qin = Qin(Lik,1:tn);
             % logical indexing may be slowing calculation time since not the same size array
@@ -171,24 +182,25 @@ for tn = 1:nt  % loop over all time steps
             end
             
             qi = Qin(Lik,tau);
-            for jk = 1:nLout
-                qijr = Qin_pathLinks(pathLinksIn{i}{ik,jk}, tau);
+            for jk = 1:nLout % loop over outgoing links
+                qijr = Qin_pathLinks(pathLinksIn{i}{ik,jk}, tau); % flow from a specific incoming link (ik) to a specific outgoing link (jk), for all paths that use these two links
                 % this is because when qi=0 gamma should be 0/is this right?
                 if qi<=10^(-10)  % qi is numerically deemed zero, by default all alphas should be zero
                     gamma{ik,jk}=0;
                 else
-                    gamma{ik,jk} = max(qijr ./ qi, 0);
-                    alpha(ik,jk) = sum(gamma{ik,jk});
+                    gamma{ik,jk} = max(qijr ./ qi, 0); % vector of size the number of paths, indicating the fraction of the total flow through node "i" that belongs to each path
+                    alpha(ik,jk) = sum(gamma{ik,jk});  % overall fraction of flow through node "i" that comes from link "ik" and goes to link "jk"
                 end
             end
         end
         
         Lout = linksOut{i};  %  set of outgoing links (including the virtual links) of a given node i
-        eta = node.signalPriorities{i};
-        effectiveSupply = min([ capacity(Lin), eta .* supply(Lout,ones(nLin,1))' ./ alpha ],[], 2);
-        qout = min(demand(Lin), effectiveSupply);
+        eta = node.signalPriorities{i}; % pre-set turning ratio due to road geometry, in case there is congestion, for all incoming links
+        effectiveSupply = min([ capacity(Lin), eta .* supply(Lout,ones(nLin,1))' ./ alpha ],[], 2); 
+		%% effective supply for each incoming link, i.e., the part of the flow through node "i" that can be assigned to each incoming link
+        qout = min(demand(Lin), effectiveSupply); % effective flow through node "i" for each incoming link
         
-        Qin(Lout,tn) = alpha' * qout;           % 	matrix multiplication
+        Qin(Lout,tn) = alpha' * qout;           % 	matrix multiplication giving the flow that enters outgoing links: it is the sum of incoming flows for each outgoing link
         Qout(Lin,tn) = qout;
         
         % split flow back into individual paths
@@ -291,10 +303,10 @@ clearvars a fft t_in llt isNonArrival r tn
 
 %% OUTPUTS
 
-link.Nup = Nup(link.index,:);
-link.Ndn = Ndn(link.index,:);
-link.Qin = Qin(link.index,:);
-link.Qout = Qout(link.index,:);
+link.Nup = Nup(link.index,:); % cumulative number of vehicles upstream from the link
+link.Ndn = Ndn(link.index,:); % cumulative number of vehicles downstream from the link
+link.Qin = Qin(link.index,:); % incoming flow
+link.Qout = Qout(link.index,:); % outgoing flow
 
 source.Nup = Nup(source.index,:);
 source.Ndn = Ndn(source.index,:);

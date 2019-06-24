@@ -2,7 +2,9 @@
 myfolder= 'C:\\Users\\AlexandreNicolas\\Documents\\C0709 DIRMED\\3_LOGICIELS\\DTA_KeHan\\DNL Marseille\\Modele_simplifie_NxM\\ReseauSimplifie\\';
 
 
-
+% Each line represents a different path and is made of the labels of the successive links
+% that the path follows.
+% The lines are filled up with 0s in order to have the same length
 pathList= [
 18 17 25 16 15 14 13 0 0 0 0 0 0 0 0 0 0 ; % path 1
 18 17 25 16 15 14 12 11 10 9 8 7 6 5 2 0 0 ; % path 2
