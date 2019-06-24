@@ -10,6 +10,8 @@ Chaque sous-dossier du présent répertoire contient une situation testée (situ
 
 Le tableur Excel "liste_des_variables.xlsx" répertorie les principaux paramètres et variables utilisés dans le code MATLAB, afin de faciliter sa compréhension.
 
+De plus, des commentaires abondants du code sont disponibles sous forme d'annotations dans les fichiers "*.m" du sous-dossier "A.Reseau_simplifie/Situation_actuelle". (Par souci de compacité, ces annotations ne figurent pas dans les programmes similaires des autres sous-dossiers.)
+
 NB: L'outil de visulation des simulations n'est opérationnel que sous MATLAB (version d'essai gratuite).
 
 
